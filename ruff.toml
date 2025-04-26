@@ -1,0 +1,108 @@
+fix = true
+line-length = 120
+output-format = "full"
+show-fixes = true
+target-version = "py38"
+
+[lint]
+ignore = [
+  "E731", # lambda-assignment
+  "PERF203", # try-except-in-loop
+  "PLR09", # too-many-*; unwanted code complexity checks
+  "RUF012", # mutable-class-default; we know about the risk
+  "PLR2004", # magic-value-comparison; not all comparisons to int or str are magic
+  "TRY003", # raise-vanilla-args; we can live without it
+  "RET505", # only true for simple if/elif branches (like in the ruff doc example). if/elif blocks are easier to read in most cases  # ruff format incompatible
+  "E111", # indentation-with-invalid-multiple
+  "E114", # indentation-with-invalid-multiple-comment
+  "E117", # over-indented
+  "E501", # line-too-long
+  "ISC001", # single-line-implicit-string-concatenation
+  "ISC002", # multi-line-implicit-string-concatenation
+  "W191", # tab-indentation
+  # not (yet) supported rules
+  # "E301",
+  # "E302",
+  # "E265",
+  # "E241",
+  # "W503",
+  # "E203",
+  # "B907",
+]
+select = [
+  # full rule-sets
+  "A", # flake8-builtins
+  # "B",   # flake8-bugbear
+  "C4", # flake8-comprehensions
+  "E", # pycodestyle
+  "ERA", # eradicate
+  "F", # Pyflakes
+  "G", # flake8-logging-format
+  "I", # isort
+  "ISC", # flake8-implicit-str-concat
+  "PERF", # perflint
+  "PIE", # flake8-pie
+  "PL", # pylint
+  "RET", # flake8-return
+  "RUF", # ruff specific rules
+  "SIM", # flake8-simplify
+  "TRY", # tryceratops
+  "T20", # flake8-print
+  "W", # pycodestyle
+  # explicit rules
+  "COM818", # trailing-comma-on-bare-tuple; other rules handled by autoformatter
+  "FBT003", # boolean-positional-value-in-call; other rules not python2 compatible
+  "UP005", # deprecated-unittest-alias
+  "UP009", # utf8-encoding-declaration
+  "UP030", # format-literals
+  "UP031", # printf-string-formatting
+]
+
+[lint.flake8-builtins]
+builtins-ignorelist = ["format", "id", "type"]
+
+[lint.isort]
+known-first-party = ["odoo", "openerp"]
+known-local-folder = ["odoo.upgrade", "odoo.addons.base.maintenance.migrations", "openerp.addons.base.maintenance.migrations"]
+section-order = ["future", "standard-library", "third-party", "first-party", "odoo-addons", "local-folder"]
+
+[lint.isort.sections]
+odoo-addons = ["odoo.addons", "openerp.addons"]
+
+[lint.per-file-ignores]
+"*/__init__.py" = [
+  "F401",
+  "F403",
+  "I001",
+]
+"*/__manifest__.py" = [
+  "B018",
+]
+
+# python2 incompatible rules:
+# - B904 reraise-no-cause
+# - B905 zip-without-explicit-strict
+# - RUF005 collection-literal-concatenation
+# - UP009 utf8-encoding-declaration
+
+# <= 9.0 scripts
+"migrations/*/[789].*/*.py" = [
+  "B904",
+  "B905",
+  "RUF005",
+  "UP009",
+]
+# <= 10.saas~16 script; python3 support has been implemented in 10.saas~17
+"migrations/*/10.{0,saas~14,saas~15,saas~16}.*/*.py" = [
+  "B904",
+  "B905",
+  "RUF005",
+  "UP009",
+]
+# as 0.0.0 scripts should support Odoo 10.0, we cannot use python2 incompatible rules
+"migrations/*/0.0.0/*.py" = [
+  "B904",
+  "B905",
+  "RUF005",
+  "UP009",
+]
